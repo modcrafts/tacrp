@@ -1,5 +1,20 @@
 util.AddNetworkString("tacrp_spawnedwepatts")
 
+function TacRP.SyncEntAttachments(ent, atts)
+    ent:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+    if table.Count(atts or {}) > 0 then
+        net.Start("tacrp_spawnedwepatts")
+            net.WriteUInt(ent:EntIndex(), 12) -- ent won't exist on client when message arrives
+            net.WriteUInt(table.Count(atts), 4)
+            for k, v in pairs(atts) do
+                net.WriteUInt(k, 4)
+                net.WriteUInt(v, TacRP.Attachments_Bits)
+            end
+        net.Broadcast()
+        ent.Attachments = atts
+    end
+end
+
 hook.Add("onDarkRPWeaponDropped", "TacRP", function(ply, ent, wep)
     ent:SetCollisionGroup(COLLISION_GROUP_WEAPON)
     if wep.ArcticTacRP and wep.Attachments then

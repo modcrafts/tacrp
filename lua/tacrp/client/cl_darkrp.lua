@@ -132,5 +132,26 @@ hook.Add("onDrawSpawnedWeapon", "TacRP", function(ent)
     --     cam.End3D2D()
     -- end
 
+    if (EyePos() - ent:GetPos()):LengthSqr() <= 262144 then -- 512^2
+        local ang = LocalPlayer():EyeAngles()
+
+        ang:RotateAroundAxis(ang:Forward(), 180)
+        ang:RotateAroundAxis(ang:Right(), 90)
+        ang:RotateAroundAxis(ang:Up(), 90)
+
+        cam.Start3D2D(ent:WorldSpaceCenter() + Vector(0, 0, (ent:OBBMaxs().z - ent:OBBMins().z) * 0.5 + 8) , ang, 0.1)
+
+            local font = esclib:AdaptiveFont("misans", 35, 500)
+            local name = wep_tbl.PrintName .. (ent:Getamount() > 1 and (" ×" .. ent:Getamount()) or "")
+
+            esclib.draw:ShadowText(name, font, 0, 0, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2)
+            if count > 0 then
+                local _, h = surface.GetTextSize(name)
+                local str = count .. " 配件"
+                esclib.draw:ShadowText(str, font, 0, h, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1)
+            end
+        cam.End3D2D()
+    end
+
     return true
 end)

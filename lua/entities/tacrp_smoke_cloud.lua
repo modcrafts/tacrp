@@ -100,6 +100,14 @@ function ENT:Initialize()
         end
 
         emitter:Finish()
+
+        hook.Add("PreventShowNameTag", self, function(self, ply)
+            if not IsValid(ply) then return end
+            if ply:GetPos():DistToSqr(ply:GetPos()) <= self.SmokeRadiusSqr then return true end
+        end)
+        hook.Add("PreventDrawNameTag", self, function(self)
+            if self:GetPos():DistToSqr(LocalPlayer():GetPos()) <= self.SmokeRadiusSqr then return true end
+        end)
     end
 
     if TacRP.ConVars["smoke_affectnpcs"]:GetBool() then

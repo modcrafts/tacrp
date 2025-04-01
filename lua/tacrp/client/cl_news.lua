@@ -1799,7 +1799,7 @@ function TacRP.CreateNewsPanel(open)
         chosen:DoClick()
     end
 end
-
+/*
 concommand.Add("tacrp_news", function()
     fetchnews(function()
         local ind, major
@@ -1870,3 +1870,4 @@ hook.Add("OnPlayerChat", "tacrp_news", function(ply, txt)
         return true
     end
 end)
+*/
